@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebBankingApp.Models
 {
-    internal class Transaction
+    public class Transaction
     {
         public Int32 Id { get; set; }
         public Int32 Amount { get; set; }
