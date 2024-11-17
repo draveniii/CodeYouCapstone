@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebBankingApp.Models", "WebBankingApp.Models.csproj", "{E414BEE0-2E9B-422A-84E6-3FDCA075178F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebBankingApp.Models", "WebBankingApp.Models.csproj", "{E414BEE0-2E9B-422A-84E6-3FDCA075178F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebBankingApp.Data", "..\WebBankingApp.Data\WebBankingApp.Data.csproj", "{64F32956-BA81-4A23-BC0C-EA974AA692BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebBankingApp.Data", "..\WebBankingApp.Data\WebBankingApp.Data.csproj", "{64F32956-BA81-4A23-BC0C-EA974AA692BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
