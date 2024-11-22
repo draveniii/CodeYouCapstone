@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebBankingApp.Models;
 
 namespace WebBankingApp.Data
 {
-    internal interface Interface1
+    public interface IAccountRepository
     {
+        public void AddAccount(Account newAccount);
+
+        public Account GetAccount(int accountId);
     }
 }
