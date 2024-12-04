@@ -12,5 +12,6 @@ namespace WebBankingApp.Models
         public String Type { get; set; }
         public Decimal MinimumBalance { get; set; }
         public Decimal InterestRate { get; set; }
+
     }
 }

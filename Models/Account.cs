@@ -1,10 +1,13 @@
-﻿namespace WebBankingApp.Models
+﻿using MVCWebBanking.Models;
+
+namespace WebBankingApp.Models
 {
     public class Account
     {
         public int Id { get; set; }
-        public List<Member> Members { get; set; } = new List<Member>();
-        public List<Share> Shares { get; set; } = new List<Share>();
-        public List <Transaction> Transactions { get; set; } = new List<Transaction>();
+        //public ICollection<Member>? Members { get; set; }
+        public List<AccountMember> Members { get; set; }
+        public List<Share> Shares { get; } = new List<Share>();
+        public List <Transaction> Transactions { get; } = new List<Transaction>();
     }
 }

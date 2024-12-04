@@ -22,5 +22,21 @@ namespace WebBankingApp.Data
         {
             optionsBuilder.UseSqlite($"Data Source={DbPath}");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<Account>().ToTable(nameof(Accounts))
+            //    .HasMany(m => m.Members)
+            //    .WithMany(a => a.Accounts);
+
+            //modelBuilder.Entity<Account>().ToTable(nameof(Account))
+            //    .HasMany(s => s.Shares)
+            //    .WithMany(a => a.Accounts);
+
+            //modelBuilder.Entity<Account>().ToTable(nameof(Account))
+            //    .HasMany(t => t.Transactions)
+            //    .WithMany(a => a.Accounts);
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
