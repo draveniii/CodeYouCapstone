@@ -11,6 +11,6 @@ namespace WebBankingApp.Models
         public Int32 Id { get; set; }
         public Int32 Amount { get; set; }
         public DateTime DateTime { get; set; }
-
+        public Share Share { get; set; }
     }
 }

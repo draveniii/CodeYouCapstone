@@ -66,17 +66,11 @@ namespace MVCWebBanking.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Amount = table.Column<int>(type: "INTEGER", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: true)
+                    DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
