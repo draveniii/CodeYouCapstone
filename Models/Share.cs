@@ -13,5 +13,6 @@ namespace WebBankingApp.Models
         public Decimal MinimumBalance { get; set; }
         public Decimal InterestRate { get; set; }
         public Account Account { get; set; }    
+        public Int32 CurrentBalance { get; set; }
     }
 }

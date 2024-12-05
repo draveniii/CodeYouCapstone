@@ -25,6 +25,7 @@ namespace MVCWebBanking.Controllers
             List<Account> accounts = await _context.Accounts
                 .Include(x => x.Members)
                 .ThenInclude(y => y.Member)
+                .Include(s => s.Shares)
                 .ToListAsync();
 
             //List<Member> members = await _context.Members.Where(m => m.Id == 1).ToListAsync();
