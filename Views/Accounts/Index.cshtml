@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<WebBankingApp.Models.Account>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shares";
 }
 
-<h1>Index</h1>
-
-<p>
+<h1>Account Number</h1>
+<h2>Shares</h2>
+@* <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p> *@
 <table class="table">
     <thead>
         <tr>
@@ -17,6 +17,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Members)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Shares)
             </th>
         </tr>
     </thead>
@@ -31,7 +34,12 @@
             {
                 @Html.DisplayFor(accountMemberItem => member.Member.Name)
             }
-                
+            </td>
+            <td>
+                @foreach (var share in item.Shares)
+                {
+                        @Html.DisplayFor(shareItem => share.Type)
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

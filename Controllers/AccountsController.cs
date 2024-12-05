@@ -28,15 +28,6 @@ namespace MVCWebBanking.Controllers
                 .Include(s => s.Shares)
                 .ToListAsync();
 
-            //List<Member> members = await _context.Members.Where(m => m.Id == 1).ToListAsync();
-            //foreach (Account account in accounts)
-            //{
-            //    List<Member> member = _context.Entry(account).Collection(a => a.Members).Query().ToList();
-            //    int test = 1;
-            //    List<Member> members = account.Members.ToList();
-            //    int test = members.Count();
-            //}
-
             return View(accounts);
         }
 
