@@ -31,6 +31,24 @@ namespace MVCWebBanking.Controllers
             return View(accounts);
         }
 
+        // GET: Account/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Account/Login
+        // To protect fom overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Id")] Account account)
+        {
+                   
+            return RedirectToAction(nameof(Details), new { id = account.Id });
+                
+        }
+
         // GET: Accounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -40,6 +58,9 @@ namespace MVCWebBanking.Controllers
             }
 
             var account = await _context.Accounts
+                .Include(x => x.Members)
+                .ThenInclude(y => y.Member)
+                .Include(s => s.Shares)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (account == null)
             {

@@ -1,18 +1,68 @@
 ﻿@model WebBankingApp.Models.Account
 
+
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Account</h1>
 
 <div>
-    <h4>Account</h4>
+    <h4>#@Model.Id</h4>
     <hr />
-    <dl class="row">
-    </dl>
+
+    <h5>
+        Shares
+    </h5>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Interest Rate
+                </th>
+                <th>
+                    Current
+                </th>
+                <th>
+                    Minimum
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var share in @Model.Shares)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(shareId => share.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(shareType => share.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(shareInterestRate => share.InterestRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(shareAvailable => share.CurrentBalance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(shareMinimum => share.MinimumBalance)
+                    </td>
+                    <td>
+                        <a asp-controller="Shares" asp-action="Details" asp-route-id="@share.Id">Details</a> |
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
