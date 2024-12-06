@@ -44,7 +44,7 @@ namespace MVCWebBanking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Id")] Account account)
         {
-                   
+                 
             return RedirectToAction(nameof(Details), new { id = account.Id });
                 
         }

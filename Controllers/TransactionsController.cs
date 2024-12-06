@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebBankingApp.Data;
 using WebBankingApp.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MVCWebBanking.Controllers
 {
@@ -63,6 +64,34 @@ namespace MVCWebBanking.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(transaction);
+        }
+
+        // GET: Transactions/Create
+        public IActionResult Deposit(int? shareId)
+        {
+            return View();
+        }
+
+        // POST: Transactions/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Deposit([Bind("Amount")] Transaction transaction, int shareId)
+        {
+            transaction.DateTime = DateTime.Now;
+            Share share = _context.Shares.Find(shareId);
+            transaction.Share = share;
+            EntityEntry<Transaction> transentity = _context.Add(transaction);
+            int saved = _context.SaveChanges();
+
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(transaction);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            return RedirectToAction("Details", "Shares", new { id = shareId });
         }
 
         // GET: Transactions/Edit/5
