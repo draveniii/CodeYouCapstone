@@ -11,7 +11,7 @@ using WebBankingApp.Data;
 namespace MVCWebBanking.Migrations
 {
     [DbContext(typeof(BankingContext))]
-    [Migration("20241204032059_InitialCreate")]
+    [Migration("20241206010004_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -79,7 +79,10 @@ namespace MVCWebBanking.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AccountId")
+                    b.Property<int>("AccountId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurrentBalance")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("InterestRate")
@@ -114,9 +117,14 @@ namespace MVCWebBanking.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ShareId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("ShareId");
 
                     b.ToTable("Transactions");
                 });
@@ -142,9 +150,13 @@ namespace MVCWebBanking.Migrations
 
             modelBuilder.Entity("WebBankingApp.Models.Share", b =>
                 {
-                    b.HasOne("WebBankingApp.Models.Account", null)
+                    b.HasOne("WebBankingApp.Models.Account", "Account")
                         .WithMany("Shares")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("WebBankingApp.Models.Transaction", b =>
@@ -152,6 +164,14 @@ namespace MVCWebBanking.Migrations
                     b.HasOne("WebBankingApp.Models.Account", null)
                         .WithMany("Transactions")
                         .HasForeignKey("AccountId");
+
+                    b.HasOne("WebBankingApp.Models.Share", "Share")
+                        .WithMany()
+                        .HasForeignKey("ShareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Share");
                 });
 
             modelBuilder.Entity("WebBankingApp.Models.Account", b =>
