@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using MVCWebBanking.Models;
 using System.Diagnostics;
+using WebBankingApp.Models;
 
 namespace MVCWebBanking.Controllers
 {
@@ -15,7 +18,7 @@ namespace MVCWebBanking.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Login", "Accounts");
         }
 
         public IActionResult Privacy()
