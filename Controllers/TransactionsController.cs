@@ -83,7 +83,7 @@ namespace MVCWebBanking.Controllers
             ViewData["shareId"] = shareId;
             transaction.DateTime = DateTime.Now;
             Share share = _context.Shares.Include(s => s.Account).Where(w => w.Id == shareId).Single();
-           transaction.Share = share;
+            transaction.Share = share;
 
             ModelState.ClearValidationState(nameof(Share));
             if (TryValidateModel(transaction, nameof(Share)))
