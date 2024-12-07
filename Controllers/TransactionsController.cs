@@ -69,6 +69,7 @@ namespace MVCWebBanking.Controllers
         // GET: Transactions/Create
         public IActionResult Deposit(int? shareId)
         {
+            ViewData["shareId"] = shareId;
             return View();
         }
 
@@ -77,21 +78,21 @@ namespace MVCWebBanking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Deposit([Bind("Amount")] Transaction transaction, int shareId)
+        public async Task<IActionResult> Deposit(int shareId, [Bind("Amount")] Transaction transaction)
         {
+            ViewData["shareId"] = shareId;
             transaction.DateTime = DateTime.Now;
-            Share share = _context.Shares.Find(shareId);
-            transaction.Share = share;
-            EntityEntry<Transaction> transentity = _context.Add(transaction);
-            int saved = _context.SaveChanges();
+            Share share = _context.Shares.Include(s => s.Account).Where(w => w.Id == shareId).Single();
+           transaction.Share = share;
 
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(transaction);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            return RedirectToAction("Details", "Shares", new { id = shareId });
+            ModelState.ClearValidationState(nameof(Share));
+            if (TryValidateModel(transaction, nameof(Share)))
+            {
+                _context.Add(transaction);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Shares", new { id = shareId });
+            }
+            return View();
         }
 
         // GET: Transactions/Edit/5
