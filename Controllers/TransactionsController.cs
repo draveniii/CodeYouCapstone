@@ -85,10 +85,7 @@ namespace MVCWebBanking.Controllers
             ViewData["shareId"] = shareId;
 
             // Loads share from database and performs deposit
-            Share share = _context.Shares
-                .Include(s => s.Account)
-                .Where(w => w.Id == shareId)
-                .Single();
+            Share share = _context.Shares.Include(s => s.Account).Where(w => w.Id == shareId).Single();
             share.CurrentBalance += transaction.Amount;
 
             // Sets transaction values
@@ -108,29 +105,18 @@ namespace MVCWebBanking.Controllers
             return View();
         }
 
-        private List<Share> SetUpTransferViewState(int fromShareId)
-        {
-            // Set up view state in case of errors
-            ViewData["fromShareId"] = fromShareId;
-            Share share = _context.Shares
-               .Include(a => a.Account)
-               .ThenInclude(s => s.Shares)
-               .Where(i => i.Id == fromShareId)
-               .Single();
-            List<Share> shares = share.Account.Shares;
-            
-            // Removes the from share from the list of possible to shares
-            shares.Remove(share);
-
-            ViewData["shares"] = shares;
-
-            return shares;
-        }
-
         // GET: Transactions/Create
-        public IActionResult Transfer(int shareId)
+        public IActionResult Transfer(int? shareId)
         {
-            List<Share> shares = SetUpTransferViewState(shareId);
+            ViewData["fromShareId"] = shareId;
+
+            Share share = _context.Shares
+                .Include(a => a.Account)
+                .ThenInclude(s => s.Shares)
+                .Where(i => i.Id == shareId)
+                .Single();
+
+            List<Share> shares = share.Account.Shares;
 
             // If shares is null return to shares details page
             if (shares == null)
@@ -138,12 +124,17 @@ namespace MVCWebBanking.Controllers
                 return RedirectToAction("Details", "Shares", shareId);
             }
 
+            // Removes the from share from the list of possible to shares
+            shares.Remove(share);
+
             // If there is no other shares you cannot perform a transfer to other shares
             if (shares.Count == 0)
             {
                 return RedirectToAction("Details", "Shares", shareId);
             }
                         
+            ViewData["shares"] = shares;
+
             return View(new Transaction());
         }
 
@@ -154,7 +145,16 @@ namespace MVCWebBanking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Transfer(int fromShareId, int toShareId, [Bind("Amount")] Transaction transaction)
         {
-            SetUpTransferViewState(fromShareId);
+
+            // Set up view state in case of errors
+            ViewData["fromShareId"] = fromShareId;
+            Share share = _context.Shares
+               .Include(a => a.Account)
+               .ThenInclude(s => s.Shares)
+               .Where(i => i.Id == fromShareId)
+               .Single();
+            List<Share> shares = share.Account.Shares;
+            ViewData["shares"] = shares;
 
             transaction.DateTime = DateTime.Now;
             
@@ -163,10 +163,7 @@ namespace MVCWebBanking.Controllers
                 .Include(s => s.Account)
                 .Where(w => w.Id == fromShareId)
                 .Single();
-            Share toShare = _context.Shares
-                .Include(s => s.Account)
-                .Where(w => w.Id == toShareId)
-                .Single();
+            Share toShare = _context.Shares.Include(s => s.Account).Where(w => w.Id == toShareId).Single();
 
             // Verifies from share has the balance available to transfer
             if (fromShare.CurrentBalance - transaction.Amount >= fromShare.MinimumBalance)
@@ -204,7 +201,7 @@ namespace MVCWebBanking.Controllers
                 _context.Add(fromTransaction);
                 _context.Add(toTransaction);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Shares", fromShareId);
+                return RedirectToAction("Details", "Shares", new { id = fromShareId });
             }
             else
             {
