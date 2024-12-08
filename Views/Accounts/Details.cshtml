@@ -27,9 +27,6 @@
                     Type
                 </th>
                 <th>
-                    Interest Rate
-                </th>
-                <th>
                     Current
                 </th>
                 <th>
@@ -49,9 +46,6 @@
                         @Html.DisplayFor(shareType => share.Type)
                     </td>
                     <td>
-                        @Html.DisplayFor(shareInterestRate => share.InterestRate)
-                    </td>
-                    <td>
                         @Html.DisplayFor(shareAvailable => share.CurrentBalance)
                     </td>
                     <td>
@@ -59,6 +53,8 @@
                     </td>
                     <td>
                         <a asp-controller="Shares" asp-action="Details" asp-route-id="@share.Id">Details</a> |
+                        <a asp-controller="Transactions" asp-action="Deposit" asp-route-id="@share.Id">Deposit</a> |
+                        <a asp-controller="Transactions" asp-action="Transfer" asp-route-id="@share.Id">Transfer From</a>
                     </td>
                 </tr>
             }
