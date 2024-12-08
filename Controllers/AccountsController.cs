@@ -31,6 +31,21 @@ namespace MVCWebBanking.Controllers
             return View(accounts);
         }
 
+        private void CreateAccountCookie(int accountId)
+        {
+            CookieOptions options = new CookieOptions
+            {
+                Domain = "localhost", // Set the domain for the cookie
+                Expires = DateTime.Now.AddHours(1), // Set expiration date to 7 days from now
+                Path = "/", // Cookie is available within the entire application
+                Secure = true, // Ensure the cookie is only sent over HTTPS
+                HttpOnly = true, // Prevent client-side scripts from accessing the cookie
+                IsEssential = true // Indicates the cookie is essential for the application to function
+            };
+
+            Response.Cookies.Append("accountId", accountId.ToString(), options);
+        }
+
         // GET: Account/Login
         public IActionResult Login()
         {
@@ -44,9 +59,20 @@ namespace MVCWebBanking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Id")] Account account)
         {
-                 
-            return RedirectToAction(nameof(Details), new { id = account.Id });
-                
+            try
+            {
+                account = _context.Accounts.Single(a => a.Id == account.Id);
+
+                CreateAccountCookie(account.Id);
+
+                return RedirectToAction(nameof(Details), new { id = account.Id });
+            }
+            catch (InvalidOperationException ioe) 
+            {
+                ModelState.AddModelError("Id", "Login Failed");
+            }     
+
+            return View();
         }
 
         // GET: Accounts/Details/5
