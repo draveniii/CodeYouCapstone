@@ -29,15 +29,15 @@ namespace MVCWebBanking.Controllers
         }
 
         // GET: Transactions/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? shareId)
         {
-            if (id == null)
+            if (shareId == null)
             {
                 return NotFound();
             }
 
             var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == shareId);
             if (transaction == null)
             {
                 return NotFound();

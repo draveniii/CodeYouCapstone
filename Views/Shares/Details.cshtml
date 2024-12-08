@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Account: @Model.Account.Id</h1>
 
 <div>
-    <h4>Share</h4>
+    <h4>Share ID: @Model.Id</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -15,6 +15,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CurrentBalance)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CurrentBalance)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MinimumBalance)
@@ -32,6 +38,36 @@
 </div>
 <div>
     <a asp-controller="Transactions" asp-action="Deposit" asp-route-shareId="@Model?.Id">Deposit</a> |
-    <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@Model?.Id">Transfer</a>
+    <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@Model?.Id">Transfer From</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<hr />
+<div>
+    <h4>Transactions</h4>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Amount
+            </th>
+            <th>
+                Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Transactions)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTime)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

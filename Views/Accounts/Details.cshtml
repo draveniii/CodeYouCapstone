@@ -5,10 +5,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Account</h1>
+<h1>Account: @Model.Id</h1>
 
 <div>
-    <h4>#@Model.Id</h4>
     <hr />
 
     <h5>
@@ -53,8 +52,8 @@
                     </td>
                     <td>
                         <a asp-controller="Shares" asp-action="Details" asp-route-id="@share.Id">Details</a> |
-                        <a asp-controller="Transactions" asp-action="Deposit" asp-route-id="@share.Id">Deposit</a> |
-                        <a asp-controller="Transactions" asp-action="Transfer" asp-route-id="@share.Id">Transfer From</a>
+                        <a asp-controller="Transactions" asp-action="Deposit" asp-route-shareId="@share.Id">Deposit</a> |
+                        <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@share.Id">Transfer From</a>
                     </td>
                 </tr>
             }
