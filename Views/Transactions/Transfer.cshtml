@@ -6,37 +6,36 @@
     var shareList = ViewData["shares"] as List<Share>;
 }
 
-<h1>Transfer</h1>
 
-<h4>Transaction</h4>
-<hr />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Transfer" asp-route-fromShareId="@ViewData["fromShareId"]">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <select name="toShareId" 
-                    asp-items="@(new SelectList(shareList, nameof(Share.Id), nameof(Share.Type)))">
-                        <option>Select a Share</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="text-center">
+    <h1>Transfer</h1>
+
+    <h4>Transaction</h4>
+    <hr />
+    <form asp-action="Transfer" asp-route-fromShareId="@ViewData["fromShareId"]">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Amount" class="control-label"></label>
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <select name="toShareId" 
+                asp-items="@(new SelectList(shareList, nameof(Share.Id), nameof(Share.Type)))">
+                    <option>Select a Share</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    </form>
+    <div>
+        <a asp-controller="Accounts" asp-action="Details" asp-route-Id="@Context.Request.Cookies["accountId"]">Back to Account View</a>
     </div>
 </div>
 
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

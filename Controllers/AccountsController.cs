@@ -36,7 +36,7 @@ namespace MVCWebBanking.Controllers
             CookieOptions options = new CookieOptions
             {
                 Domain = "localhost", // Set the domain for the cookie
-                Expires = DateTime.Now.AddHours(1), // Set expiration date to 7 days from now
+                Expires = DateTime.Now.AddHours(1), // Set expiration date to 1 hour from now
                 Path = "/", // Cookie is available within the entire application
                 Secure = true, // Ensure the cookie is only sent over HTTPS
                 HttpOnly = true, // Prevent client-side scripts from accessing the cookie
