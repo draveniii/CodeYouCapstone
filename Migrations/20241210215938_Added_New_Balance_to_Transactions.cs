@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVCWebBanking.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Added_New_Balance_to_Transactions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,7 +48,7 @@ namespace MVCWebBanking.Migrations
                     MinimumBalance = table.Column<decimal>(type: "TEXT", nullable: false),
                     InterestRate = table.Column<decimal>(type: "TEXT", nullable: false),
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CurrentBalance = table.Column<int>(type: "INTEGER", nullable: false)
+                    CurrentBalance = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,19 +93,14 @@ namespace MVCWebBanking.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
                     DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ShareId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: true)
+                    NewBalance = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ShareId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Transactions_Shares_ShareId",
                         column: x => x.ShareId,
@@ -127,11 +122,6 @@ namespace MVCWebBanking.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Shares_AccountId",
                 table: "Shares",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_AccountId",
-                table: "Transactions",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(

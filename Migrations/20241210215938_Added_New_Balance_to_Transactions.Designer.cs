@@ -11,8 +11,8 @@ using WebBankingApp.Data;
 namespace MVCWebBanking.Migrations
 {
     [DbContext(typeof(BankingContext))]
-    [Migration("20241207164229_ShareTransactionValuesToDecimal")]
-    partial class ShareTransactionValuesToDecimal
+    [Migration("20241210215938_Added_New_Balance_to_Transactions")]
+    partial class Added_New_Balance_to_Transactions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,6 +112,9 @@ namespace MVCWebBanking.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("NewBalance")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ShareId")

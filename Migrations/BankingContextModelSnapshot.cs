@@ -111,6 +111,9 @@ namespace MVCWebBanking.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("NewBalance")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ShareId")
                         .HasColumnType("INTEGER");
 

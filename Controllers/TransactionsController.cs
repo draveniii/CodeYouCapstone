@@ -63,6 +63,7 @@ namespace MVCWebBanking.Controllers
             // Sets transaction values
             transaction.DateTime = DateTime.Now;
             transaction.Share = share;
+            transaction.NewBalance = share.CurrentBalance;
 
             ModelState.ClearValidationState(nameof(Share));
 
