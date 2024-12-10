@@ -22,22 +22,19 @@
         </tr>
     </thead>
     <tbody>
+        @foreach (var member in Model.Members)
+        {
         <tr>
-            @foreach (var member in Model.Members)
-            {
-                <td>
-                    @Html.DisplayFor(accountmemberitem => member.Member.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(accountmemberitem => member.Member.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(accountmemberitem => member.Member.DateOfBirth)
-                </td>
-                
-
-
-            }
+            <td>
+                @Html.DisplayFor(accountmemberitem => member.Member.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(accountmemberitem => member.Member.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(accountmemberitem => member.Member.DateOfBirth)
+            </td>
         </tr>
+        }
     </tbody>
 </table>
