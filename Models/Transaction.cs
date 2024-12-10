@@ -11,7 +11,9 @@ namespace WebBankingApp.Models
         public Int32 Id { get; set; }
         public Decimal Amount { get; set; }
         public DateTime DateTime { get; set; }
+        //public Decimal NewBalance { get; set; }
         public virtual Share Share { get; set; }
+
 
         // Constructor
         public Transaction()

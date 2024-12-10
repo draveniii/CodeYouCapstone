@@ -20,10 +20,17 @@ namespace MVCWebBanking.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Members.ToListAsync());
-        }
+        //public async Task<IActionResult> Index(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var members = await _context.Members
+        //        .ToListAsync(a => a.AccountMember.Accounts.Id == id);
+        //    return View(await _context.Members.ToListAsync());
+        //}
 
         // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)

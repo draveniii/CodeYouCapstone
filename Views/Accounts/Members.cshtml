@@ -1,0 +1,43 @@
+﻿@model WebBankingApp.Models.Account
+
+@{
+    ViewData["Title"] = "Members";
+}
+@Model
+<h1>Account Number: @Model.Id</h1>
+<h2>Members</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Date of Birth
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var member in Model.Members)
+            {
+                <td>
+                    @Html.DisplayFor(accountmemberitem => member.Member.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(accountmemberitem => member.Member.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(accountmemberitem => member.Member.DateOfBirth)
+                </td>
+                
+
+
+            }
+        </tr>
+    </tbody>
+</table>

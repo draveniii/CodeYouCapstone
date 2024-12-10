@@ -19,17 +19,17 @@ namespace MVCWebBanking.Controllers
             _context = context;
         }
 
-        // GET: Accounts
-        public async Task<IActionResult> Index()
+        // GET: Members
+        public async Task<IActionResult> Members(int? id )
         {
-            List<Account> accounts = await _context.Accounts
+            Account account = await _context.Accounts
                 .Include(x => x.Members)
                 .ThenInclude(y => y.Member)
-                .Include(s => s.Shares)
-                .ToListAsync();
+                .FirstOrDefaultAsync(a => a.Id == id);
 
-            return View(accounts);
+            return View(account);
         }
+
 
         private void CreateAccountCookie(int accountId)
         {
