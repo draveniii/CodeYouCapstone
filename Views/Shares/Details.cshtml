@@ -7,7 +7,7 @@
 <h1>Account: @Model.Account.Id</h1>
 
 <div>
-    <h4>Share ID: @Model.ShareNumber</h4>
+    <h4>Share ID: @Model.Id</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -37,8 +37,8 @@
     </dl>
 </div>
 <div>
-    <a asp-controller="Transactions" asp-action="Deposit" asp-route-shareId="@Model?.ShareNumber">Deposit</a> |
-    <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@Model?.ShareNumber">Transfer From</a> |
+    <a asp-controller="Transactions" asp-action="Deposit" asp-route-shareId="@Model?.Id">Deposit</a> |
+    <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@Model?.Id">Transfer From</a> |
 </div>
 <hr />
 <div>

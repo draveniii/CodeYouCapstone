@@ -9,7 +9,6 @@ namespace WebBankingApp.Models
     public class Share
     {
         public Int32 Id { get; set; }
-        public Int32 ShareNumber { get; set; }
         public String Type { get; set; }
         public Decimal MinimumBalance { get; set; }
         public Decimal InterestRate { get; set; }

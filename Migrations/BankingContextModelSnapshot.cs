@@ -88,9 +88,6 @@ namespace MVCWebBanking.Migrations
                     b.Property<decimal>("MinimumBalance")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ShareNumber")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -118,12 +115,6 @@ namespace MVCWebBanking.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ShareId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ToAccountId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ToShareId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
