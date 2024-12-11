@@ -10,9 +10,11 @@ namespace WebBankingApp.Models
     {
         public Int32 Id { get; set; }
         public Decimal Amount { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } 
         public Decimal NewBalance { get; set; }
         public virtual Share Share { get; set; }
+        public virtual Int32? ToAccountId { get; set; }
+        public virtual Int32? ToShareId { get; set; }
 
 
         // Constructor
@@ -23,6 +25,7 @@ namespace WebBankingApp.Models
             DateTime = DateTime.MinValue;
             Share = null;
         }
+
         // Copy constructor
         public Transaction(Transaction transaction)
         {

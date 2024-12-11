@@ -1,21 +1,16 @@
 ﻿@model WebBankingApp.Models.Transaction
 
 @{
-    ViewData["Title"] = "MMTransfer";
+    ViewData["Title"] = "Deposit";
 }
 
 <div class="text-center">
-    <h1>Member to Member Transfer</h1>
+    <h1>Deposit</h1>
 
     <h4>Transaction</h4>
     <hr />
-    <form asp-action="Deposit" asp-route-shareId="@ViewData["share"]">
+    <form asp-action="Deposit" asp-route-shareId="@ViewData["shareId"]">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Id" class="control-label"></label>
-            <input asp-for="Amount" class="form-control" />
-            <span asp-validation-for="Amount" class="text-danger"></span>
-        </div>
         <div class="form-group">
             <label asp-for="Amount" class="control-label"></label>
             <input asp-for="Amount" class="form-control" />
