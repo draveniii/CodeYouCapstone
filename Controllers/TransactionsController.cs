@@ -29,6 +29,16 @@ namespace MVCWebBanking.Controllers
             return View();
         }
 
+        public bool VerifyAmountNonNegative(Transaction transaction)
+        {
+            if (transaction.Amount < 0)
+            {
+                ModelState.AddModelError("Amount", "Amount must be a positive value");
+                return false;
+            }
+
+            return true;
+        }
         // POST: Transactions/Deposit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -38,12 +48,7 @@ namespace MVCWebBanking.Controllers
         {
             ViewData["shareId"] = shareId;
 
-
-            if (transaction.Amount < 0)
-            {
-                ModelState.AddModelError("Amount", "Amount must be a positive value");
-                return View();
-            }
+            VerifyAmountNonNegative(transaction);
 
             // Loads share from database and performs deposit
             Share share = _context.Shares.Include(s => s.Account).Where(w => w.Id == shareId).Single();
@@ -105,7 +110,7 @@ namespace MVCWebBanking.Controllers
             return View(new Transaction());
         }
 
-        // POST: Transactions/Create
+        // POST: Transactions/Transfer
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -124,11 +129,7 @@ namespace MVCWebBanking.Controllers
             shares.Remove(share);
             ViewData["shares"] = shares;
 
-            if (transaction.Amount < 0)
-            {
-                ModelState.AddModelError("Amount", "Amount must be a positive value");
-                return View();
-            }
+            bool validAmount = VerifyAmountNonNegative(transaction);
 
             transaction.DateTime = DateTime.Now;
             
@@ -173,17 +174,19 @@ namespace MVCWebBanking.Controllers
             bool fromTransactionValid = Validator.TryValidateObject(fromTransaction, fromContext, results, true);                        
             bool toTransactionValid = Validator.TryValidateObject(toTransaction, toContext, results, true);
 
-            // If both transactions are valid save
-            if (fromTransactionValid && toTransactionValid) 
+            if (validAmount)
             {
-                _context.Add(fromTransaction);
-                _context.Add(toTransaction);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Shares", new { id = fromShareId });
-            }
-            else
-            {
-                ModelState.AddModelError("Amount", "Transaction Not Valid");
+                if (fromTransactionValid && toTransactionValid)
+                {
+                    _context.Add(fromTransaction);
+                    _context.Add(toTransaction);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", "Shares", new { id = fromShareId });
+                }
+                else
+                {
+                    ModelState.AddModelError("Amount", "Transaction Not Valid");
+                }
             }
 
             return View();
