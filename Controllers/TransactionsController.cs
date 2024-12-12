@@ -22,32 +22,14 @@ namespace MVCWebBanking.Controllers
             _context = context;
         }
 
-        // GET: Transactions/Details/5
-        public async Task<IActionResult> Details(int? shareId)
-        {
-            if (shareId == null)
-            {
-                return NotFound();
-            }
-
-            var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.Id == shareId);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            return View(transaction);
-        }
-
-        // GET: Transactions/Create
+        // GET: Transactions/Deposit
         public IActionResult Deposit(int? shareId)
         {
             ViewData["shareId"] = shareId;
             return View();
         }
 
-        // POST: Transactions/Create
+        // POST: Transactions/Deposit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]

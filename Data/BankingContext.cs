@@ -6,10 +6,10 @@ namespace WebBankingApp.Data
 {
     public class BankingContext : DbContext
     { 
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Share> Shares { get; set; }
-        public DbSet<Member> Members { get; set; }
-        public DbSet<Models.Transaction> Transactions { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Share> Shares { get; set; }
+        public virtual DbSet<Member> Members { get; set; }
+        public virtual DbSet<Models.Transaction> Transactions { get; set; }
         public string DbPath { get; set; }
 
         public BankingContext() 

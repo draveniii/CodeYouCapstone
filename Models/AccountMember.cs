@@ -1,6 +1,4 @@
-﻿using WebBankingApp.Models;
-
-namespace MVCWebBanking.Models
+﻿namespace WebBankingApp.Models
 {
     public class AccountMember
     {
