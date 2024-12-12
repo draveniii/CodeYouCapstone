@@ -42,18 +42,31 @@ namespace MVCWebBanking.Tests.Controllers
         {
 
             // Begin Mocking Data
-            Account account = new Account();
-            account.Id = 1;
+            Account account1 = new Account(1);
 
-            var accountData = new List<Account>
-            {
-                account
-            }.AsQueryable();
+            Share account1Share1 = new Share(1, "Savings", 25, .005M, account1, 100);
+            Share account1Share2 = new Share(2, "Checking", 0, 0, account1, 100);
+
+            account1.Shares.Add(account1Share1);
+            account1.Shares.Add(account1Share2);
+
+
+            Account account2 = new Account(2);
+
+            Share account2Share1 = new Share(3, "Savings", 25, .005M, account1, 100);
+
+            account2.Shares.Add(account2Share1);
 
             var shareData = new List<Share>
             {
-                new Share { Id = 1, Account = account, CurrentBalance = 100, InterestRate = 0, MinimumBalance = 0, Type = "Checking", Transactions = null  },
-                new Share { Id = 2, Account = account, CurrentBalance = 100, InterestRate = .005M, MinimumBalance = 25, Type = "Savings", Transactions = null  }
+                account1Share1,
+                account1Share2
+            }.AsQueryable();  
+
+            var accountData = new List<Account>
+            {
+                account1,
+                account2
             }.AsQueryable();
 
             var mockSetAccount = new Mock<DbSet<Account>>();
@@ -157,7 +170,7 @@ namespace MVCWebBanking.Tests.Controllers
         }
 
         [Fact]
-        public async Task TransferGetInvalid()
+        public async Task TransferGetInvalidShareId()
         {
             // Arrange
             TransactionsController controller = DataSetup(true);
@@ -176,6 +189,72 @@ namespace MVCWebBanking.Tests.Controllers
             Assert.Equal(1, routeValues.Count);
             Assert.Equal("id", routeValues[0].Key);
             Assert.Equal(10000, routeValues[0].Value);
+        }
+
+        [Fact]
+        public async Task TransferGetNotEnoughSharesOnAccount()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            // Act
+            IActionResult result = controller.Transfer(3); 
+
+            // Assert
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Shares", redirectResult.ControllerName);
+            Assert.Equal("Details", redirectResult.ActionName);
+
+            List<KeyValuePair<string, object>> routeValues = redirectResult.RouteValues.ToList();
+
+            Assert.Equal(1, routeValues.Count);
+            Assert.Equal("id", routeValues[0].Key);
+            Assert.Equal(3, routeValues[0].Value);
+        }
+
+        [Fact]
+        public async Task TransferGetValid()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            // Act
+            IActionResult result = controller.Transfer(1);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int fromShareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, fromShareId);
+                        
+            List<Share> shares = (List<Share>) viewResult.ViewData["shares"];
+            Assert.Equal(1, shares.Count());
+            Assert.Equal(2, shares[0].Id);
+        }
+
+        [Fact]
+        public async Task TransferPostNonValidated()
+        {
+            TransactionsController controller = DataSetup(false);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = 10;
+
+            // Act
+            IActionResult result = await controller.Transfer(1, 2, transaction);
+
+            // Assert
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Shares", redirectResult.ControllerName);
+            Assert.Equal("Details", redirectResult.ActionName);
+
+            List<KeyValuePair<string, object>> routeValues = redirectResult.RouteValues.ToList();
+
+            Assert.Equal(1, routeValues.Count);
+            Assert.Equal("id", routeValues[0].Key);
+            Assert.Equal(1, routeValues[0].Value);
         }
     }
 }

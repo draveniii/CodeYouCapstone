@@ -97,7 +97,7 @@ namespace MVCWebBanking.Controllers
             // If there is no other shares you cannot perform a transfer to other shares
             if (shares.Count == 0)
             {
-                return RedirectToAction("Details", "Shares", shareId);
+                return RedirectToAction("Details", "Shares", new { id = shareId });
             }
                         
             ViewData["shares"] = shares;
