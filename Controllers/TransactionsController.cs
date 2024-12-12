@@ -143,14 +143,13 @@ namespace MVCWebBanking.Controllers
             if (fromShare.CurrentBalance - transaction.Amount >= fromShare.MinimumBalance)
             {
                 fromShare.CurrentBalance -= transaction.Amount;
+                toShare.CurrentBalance += transaction.Amount;
             }
             else
             {
                 ModelState.AddModelError("Amount", "Insufficient Balance");
                 return View();
-            }
-            
-            toShare.CurrentBalance += transaction.Amount;
+            }          
 
             // Sets transaction values
             Transaction fromTransaction = new Transaction(transaction);
@@ -159,8 +158,13 @@ namespace MVCWebBanking.Controllers
             // Makes the amount report as a credit vs a debit
             fromTransaction.Amount = -1 * fromTransaction.Amount;
 
+            // Links Shares to transactions
             fromTransaction.Share = fromShare;
             toTransaction.Share = toShare;
+
+            // Updates NewBalance on transactions
+            fromTransaction.NewBalance = fromShare.CurrentBalance;
+            toTransaction.NewBalance = toShare.CurrentBalance;
 
             // Validate transactions before save
             ValidationContext fromContext = new ValidationContext(fromTransaction);
