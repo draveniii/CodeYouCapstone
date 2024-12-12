@@ -38,6 +38,13 @@ namespace MVCWebBanking.Controllers
         {
             ViewData["shareId"] = shareId;
 
+
+            if (transaction.Amount < 0)
+            {
+                ModelState.AddModelError("Amount", "Amount must be a positive value");
+                return View();
+            }
+
             // Loads share from database and performs deposit
             Share share = _context.Shares.Include(s => s.Account).Where(w => w.Id == shareId).Single();
             share.CurrentBalance += transaction.Amount;
@@ -57,27 +64,32 @@ namespace MVCWebBanking.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Shares", new { id = shareId });
             }
+
             return View();
         }
 
-        // GET: Transactions/Create
+        // GET: Transactions/Transfer
         public IActionResult Transfer(int? shareId)
         {
             ViewData["fromShareId"] = shareId;
 
-            Share share = _context.Shares
-                .Include(a => a.Account)
-                .ThenInclude(s => s.Shares)
-                .Where(i => i.Id == shareId)
-                .Single();
+            Share share;
+
+            try
+            {
+                share = _context.Shares
+                    .Include(a => a.Account)
+                    .ThenInclude(s => s.Shares)
+                    .Where(i => i.Id == shareId)
+                    .Single();
+            }
+            catch (Exception InvalidOperation)
+            {
+                // If shares is null return to shares details page
+                return RedirectToAction("Details", "Shares", new { id = shareId });
+            }
 
             List<Share> shares = share.Account.Shares;
-
-            // If shares is null return to shares details page
-            if (shares == null)
-            {
-                return RedirectToAction("Details", "Shares", shareId);
-            }
 
             // Removes the from share from the list of possible to shares
             shares.Remove(share);
