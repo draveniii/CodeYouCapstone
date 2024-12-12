@@ -256,5 +256,74 @@ namespace MVCWebBanking.Tests.Controllers
             Assert.Equal("id", routeValues[0].Key);
             Assert.Equal(1, routeValues[0].Value);
         }
+
+        [Fact]
+        public async Task TransferPostNegativeAmount()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = -10;
+
+            // Act
+            IActionResult result = await controller.Transfer(1, 2, transaction);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int shareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, shareId);
+
+            List<Share> shares = (List<Share>)viewResult.ViewData["shares"];
+            Assert.Equal(1, shares.Count());
+            Assert.Equal(2, shares[0].Id);
+        }
+
+        //[Fact]
+        //public async Task TransferPostAmountOutOfRange()
+        //{
+        //    // Arrange
+        //    TransactionsController controller = DataSetup(true);
+
+        //    WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+        //    transaction.Amount = 2147483648;
+
+        //    // Act
+        //    IActionResult result = await controller.Transfer(1, 2, transaction);
+
+        //    // Assert
+        //    ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+        //    int shareId = Assert.IsType<int>(viewResult.ViewData["shareId"]);
+        //    Assert.Equal(1, shareId);
+
+        //    List<Share> shares = (List<Share>)viewResult.ViewData["shares"];
+        //    Assert.Equal(1, shares.Count());
+        //    Assert.Equal(2, shares[0].Id);
+        //}
+
+        [Fact]
+        public async Task TransferPostAmountGreaterThanAvailableBalance()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = 110;
+
+            // Act
+            IActionResult result = await controller.Transfer(1, 2, transaction);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int shareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, shareId);
+
+            List<Share> shares = (List<Share>)viewResult.ViewData["shares"];
+            Assert.Equal(1, shares.Count());
+            Assert.Equal(2, shares[0].Id);
+        }
     }
 }
