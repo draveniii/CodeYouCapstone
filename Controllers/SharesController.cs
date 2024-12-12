@@ -27,10 +27,10 @@ namespace MVCWebBanking.Controllers
                 return NotFound();
             }
 
-            Share share = await _context.Shares
+            Share share = _context.Shares
                 .Include(a => a.Account)
                 .Include(t => t.Transactions)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(m => m.Id == id);
             
             if (share == null)
             {
