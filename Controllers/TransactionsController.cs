@@ -121,7 +121,14 @@ namespace MVCWebBanking.Controllers
                .Where(i => i.Id == fromShareId)
                .Single();
             List<Share> shares = share.Account.Shares;
+            shares.Remove(share);
             ViewData["shares"] = shares;
+
+            if (transaction.Amount < 0)
+            {
+                ModelState.AddModelError("Amount", "Amount must be a positive value");
+                return View();
+            }
 
             transaction.DateTime = DateTime.Now;
             
