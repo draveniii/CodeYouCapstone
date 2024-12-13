@@ -29,6 +29,7 @@ namespace MVCWebBanking.Controllers
             return View();
         }
 
+        // Helper function that checks to make sure input amounts are positive
         public bool VerifyAmountNonNegative(Transaction transaction)
         {
             if (transaction.Amount < 0)

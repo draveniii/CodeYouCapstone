@@ -19,7 +19,7 @@ namespace MVCWebBanking.Controllers
             _context = context;
         }
 
-        // GET: Members
+        // GET: Accounts/Members
         public async Task<IActionResult> Members(int? id )
         {
 
@@ -36,7 +36,7 @@ namespace MVCWebBanking.Controllers
             return View(account);
         }
 
-
+        // Creates a cookie so that the current active account persists through each controller
         private void CreateAccountCookie(int accountId)
         {
             CookieOptions options = new CookieOptions
