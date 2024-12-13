@@ -1,3 +1,6 @@
+This is a web banking application used to manage and view details of a bank account.
+It was developed on VisualStudios 2022 community edition.
+
 Here are the used accounts that are seeded upon application startup:
   - 1
   - 2
@@ -13,9 +16,7 @@ What can you do:
   - Transfer money between shares on the same account
   - View transactions performed on shares
 
-Known issues
-  - Currently their is a known issue where when finishing a transfer it deletes the from share from the database
-
 Upcoming Features
   - Member to member transfers
   - External transfers
+
