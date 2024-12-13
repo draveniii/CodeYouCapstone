@@ -151,9 +151,10 @@ namespace MVCWebBanking.Tests.Controllers
         {
             // Arrange
             AccountsController controller = DataSetup(true);
+            MockHttpContext(controller, "accountId", "10000"); // Account number 10000 will probably not exist
 
-            // Act
-            IActionResult result = await controller.Details(10000); // Account number 10000 will probably not exist
+            // Act            
+            IActionResult result = await controller.Details(); 
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -162,11 +163,12 @@ namespace MVCWebBanking.Tests.Controllers
         [Fact]
         public async Task DetailsGetFound()
         {
-            // Arrange
+            // ArrangeS
             AccountsController controller = DataSetup(true);
+            MockHttpContext(controller, "accountId", "1");
 
-            // Act
-            IActionResult result = await controller.Details(1); 
+            // Act            
+            IActionResult result = await controller.Details();
 
             // Assert
             Assert.IsType<ViewResult>(result);
@@ -196,6 +198,27 @@ namespace MVCWebBanking.Tests.Controllers
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        private void MockHttpContext(AccountsController controller, string cookieKey, string cookieValue)
+        {
+            string CookieKey = cookieKey;
+            var requestCookiesMock = new Mock<IRequestCookieCollection>();
+            requestCookiesMock.SetupGet(c => c[CookieKey]).Returns(cookieValue);
+
+            var responseCookiesMock = new Mock<IResponseCookies>();
+            responseCookiesMock.Setup(c => c.Delete(CookieKey)).Verifiable();
+
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(ctx => ctx.Request.Cookies)
+                            .Returns(requestCookiesMock.Object);
+            httpContextMock.Setup(ctx => ctx.Response.Cookies)
+                            .Returns(responseCookiesMock.Object);
+
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContextMock.Object
+            };
         }
     }
 }

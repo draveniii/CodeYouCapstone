@@ -46,6 +46,8 @@ namespace MVCWebBanking.Tests.Controllers
 
             Share account1Share1 = new Share(1, "Savings", 25, .005M, account1, 100);
             Share account1Share2 = new Share(2, "Checking", 0, 0, account1, 100);
+            account1Share1.Account = account1;
+            account1Share2.Account = account1;
 
             account1.Shares.Add(account1Share1);
             account1.Shares.Add(account1Share2);
@@ -54,6 +56,7 @@ namespace MVCWebBanking.Tests.Controllers
             Account account2 = new Account(2);
 
             Share account2Share1 = new Share(3, "Savings", 25, .005M, account1, 100);
+            account2Share1.Account = account2;
 
             account2.Shares.Add(account2Share1);
 

@@ -82,8 +82,10 @@ namespace MVCWebBanking.Controllers
         }
 
         // GET: Accounts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details()
         {
+            int id = Convert.ToInt32(Request.Cookies["accountId"]);
+
             if (id == null)
             {
                 return NotFound();
