@@ -15,7 +15,7 @@ namespace WebBankingApp.Models
         public Int32 AccountId { get; set; }
         public Account Account { get; set; }    
         public Decimal CurrentBalance { get; set; }
-        public virtual List<Transaction>? Transactions { get; set; }
+        public virtual List<Transaction>? Transactions { get; set; } = new List<Transaction>();
 
         // Default Constructor
         public Share()

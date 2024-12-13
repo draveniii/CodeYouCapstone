@@ -12,6 +12,7 @@ namespace WebBankingApp.Models
         public Decimal Amount { get; set; }
         public DateTime DateTime { get; set; }
         public Decimal NewBalance { get; set; }
+        public Int32 ShareId { get; set; }
         public virtual Share Share { get; set; }
 
 
@@ -23,12 +24,14 @@ namespace WebBankingApp.Models
             DateTime = DateTime.MinValue;
             Share = null;
         }
+
         // Copy constructor
         public Transaction(Transaction transaction)
         {
             Id = transaction.Id;
             Amount = transaction.Amount;
             DateTime = transaction.DateTime;
+            ShareId = transaction.ShareId;
             Share = transaction.Share;
         }
     }

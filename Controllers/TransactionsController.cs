@@ -118,8 +118,7 @@ namespace MVCWebBanking.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Transfer(int fromShareId, int toShareId, [Bind("Amount")] Transaction transaction)
-        {
-
+        {         
             // Set up view state in case of errors
             ViewData["fromShareId"] = fromShareId;
             Share share = _context.Shares
@@ -128,10 +127,19 @@ namespace MVCWebBanking.Controllers
                .Where(i => i.Id == fromShareId)
                .Single();
             List<Share> shares = share.Account.Shares;
-            shares.Remove(share);
-            ViewData["shares"] = shares;
+
 
             bool validAmount = VerifyAmountNonNegative(transaction);
+
+            // Checks to see if a toShare was selected
+            if (toShareId == 0)
+            {
+                shares.Remove(share);
+                ViewData["shares"] = shares;
+                ViewData["fromShare"] = share;
+                ModelState.AddModelError("Amount", "Please select a share to transfer to.");
+                return View();
+            }
 
             transaction.DateTime = DateTime.Now;
             
@@ -140,7 +148,10 @@ namespace MVCWebBanking.Controllers
                 .Include(s => s.Account)
                 .Where(w => w.Id == fromShareId)
                 .Single();
-            Share toShare = _context.Shares.Include(s => s.Account).Where(w => w.Id == toShareId).Single();
+            Share toShare = _context.Shares
+                .Include(s => s.Account)
+                .Where(w => w.Id == toShareId)
+                .Single();
 
             // Verifies from share has the balance available to transfer
             if (fromShare.CurrentBalance - transaction.Amount >= fromShare.MinimumBalance)
@@ -150,6 +161,9 @@ namespace MVCWebBanking.Controllers
             }
             else
             {
+                shares.Remove(share);
+                ViewData["shares"] = shares;
+                ViewData["fromShare"] = share;
                 ModelState.AddModelError("Amount", "Insufficient Balance");
                 return View();
             }          
@@ -158,31 +172,32 @@ namespace MVCWebBanking.Controllers
             Transaction fromTransaction = new Transaction(transaction);
             Transaction toTransaction = new Transaction(transaction);
 
-            // Makes the amount report as a credit vs a debit
-            fromTransaction.Amount = -1 * fromTransaction.Amount;
+            ModelState.Remove("Share");
+            ModelState.Remove("Amount");
 
-            // Links Shares to transactions
-            fromTransaction.Share = fromShare;
-            toTransaction.Share = toShare;
+            // Makes the amount on the fromShare report as a credit vs a debit
+            fromTransaction.Amount = -1 * fromTransaction.Amount;        
 
             // Updates NewBalance on transactions
             fromTransaction.NewBalance = fromShare.CurrentBalance;
             toTransaction.NewBalance = toShare.CurrentBalance;
 
+            fromShare.Transactions.Add(fromTransaction);
+            toShare.Transactions.Add(toTransaction);
+
+
             // Validate transactions before save
             ValidationContext fromContext = new ValidationContext(fromTransaction);
             ValidationContext toContext = new ValidationContext(toTransaction);
             List<ValidationResult> results = new List<ValidationResult>();
-            bool fromTransactionValid = Validator.TryValidateObject(fromTransaction, fromContext, results, true);                        
+            bool fromTransactionValid = Validator.TryValidateObject(fromTransaction, fromContext, results, true);
             bool toTransactionValid = Validator.TryValidateObject(toTransaction, toContext, results, true);
 
             if (validAmount)
             {
                 if (fromTransactionValid && toTransactionValid)
                 {
-                    _context.Add(fromTransaction);
-                    _context.Add(toTransaction);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                     return RedirectToAction("Details", "Shares", new { id = fromShareId });
                 }
                 else
@@ -191,6 +206,9 @@ namespace MVCWebBanking.Controllers
                 }
             }
 
+            shares.Remove(share);
+            ViewData["shares"] = shares;
+            ViewData["fromShare"] = share;
             return View();
         }
     }
