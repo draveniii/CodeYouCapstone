@@ -12,6 +12,7 @@ namespace WebBankingApp.Models
         public String Type { get; set; }
         public Decimal MinimumBalance { get; set; }
         public Decimal InterestRate { get; set; }
+        public Int32 AccountId { get; set; }
         public Account Account { get; set; }    
         public Decimal CurrentBalance { get; set; }
         public virtual List<Transaction>? Transactions { get; set; }
@@ -27,7 +28,8 @@ namespace WebBankingApp.Models
             Type = type;
             MinimumBalance = minimumBalance;
             InterestRate = interestRate;   
-            Account = account;
+            Account = null;
+            AccountId = account.Id;
             CurrentBalance = currentBalance;
         }
 
