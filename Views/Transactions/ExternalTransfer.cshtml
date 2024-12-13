@@ -1,0 +1,50 @@
+﻿@model WebBankingApp.Models.Transaction
+@using WebBankingApp.Models;
+
+@{
+    ViewData["Title"] = "External Transfer";
+    Share fromShare = ViewData["fromShare"] as Share;
+}
+
+<div class="text-center">
+    <h1>External Transfer</h1>
+
+    <h4>Transaction</h4>
+    <hr />
+    <form asp-action="ExternalTransfer" asp-route-shareId="@ViewData["fromShareId"]">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            Current Balance: $@fromShare.CurrentBalance
+        </div>
+        <div class="form-group">
+            <label asp-for="Amount" class="control-label"></label>
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+        <div>
+        Account Number
+        </div>
+        <div class="form-group">
+            <input type="text" name="Text_Box" />
+        </div>
+        <div>
+            Routing Number
+        </div>
+        <div class="form-group">
+            <input type="text" name="Text_Box" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    </form>
+    <div>
+        <a asp-controller="Accounts" asp-action="Details" asp-route-Id="@Context.Request.Cookies["accountId"]">Back to Account View</a>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

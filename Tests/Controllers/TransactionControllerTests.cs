@@ -329,5 +329,101 @@ namespace MVCWebBanking.Tests.Controllers
             Assert.Equal("id", routeValues[0].Key);
             Assert.Equal(1, routeValues[0].Value);
         }
+
+        [Fact]
+        public async Task ExternalTransferGet()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            // Act
+            IActionResult result = controller.ExternalTransfer(1);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int shareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, shareId);
+        }
+
+        [Fact]
+        public async Task ExternalTransferPostValidated()
+        {
+            TransactionsController controller = DataSetup(true);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = 10;
+
+            // Act
+            IActionResult result = await controller.ExternalTransfer(1, transaction);
+
+            // Assert
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Shares", redirectResult.ControllerName);
+            Assert.Equal("Details", redirectResult.ActionName);
+
+            List<KeyValuePair<string, object>> routeValues = redirectResult.RouteValues.ToList();
+
+            Assert.Equal(1, routeValues.Count);
+            Assert.Equal("id", routeValues[0].Key);
+            Assert.Equal(1, routeValues[0].Value);
+        }
+
+        [Fact]
+        public async Task ExternalTransferNonValidated()
+        {
+            TransactionsController controller = DataSetup(false);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = 10;
+
+            // Act
+            IActionResult result = await controller.ExternalTransfer(1, transaction);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int shareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, shareId);
+        }
+
+        [Fact]
+        public async Task ExternalTransferPostInvalidAmount()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = -10;
+
+            // Act
+            IActionResult result = await controller.ExternalTransfer(1, transaction);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int shareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, shareId);
+        }
+
+        [Fact]
+        public async Task ExternalTransferPostAmountGreaterThanAvailableBalance()
+        {
+            // Arrange
+            TransactionsController controller = DataSetup(true);
+
+            WebBankingApp.Models.Transaction transaction = new WebBankingApp.Models.Transaction();
+            transaction.Amount = 1000;
+
+            // Act
+            IActionResult result = await controller.ExternalTransfer(1, transaction);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            int shareId = Assert.IsType<int>(viewResult.ViewData["fromShareId"]);
+            Assert.Equal(1, shareId);
+        }
     }
 }

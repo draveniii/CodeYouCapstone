@@ -40,6 +40,7 @@ namespace MVCWebBanking.Controllers
 
             return true;
         }
+
         // POST: Transactions/Deposit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -209,6 +210,76 @@ namespace MVCWebBanking.Controllers
             shares.Remove(share);
             ViewData["shares"] = shares;
             ViewData["fromShare"] = share;
+            return View();
+        }
+
+        // GET: Transactions/ExternalTransfer
+        public IActionResult ExternalTransfer(int? shareId)
+        {
+            ViewData["fromShareId"] = shareId;
+
+            Share share;
+
+            try
+            {
+                share = _context.Shares
+                    .Include(a => a.Account)
+                    .ThenInclude(s => s.Shares)
+                    .Where(i => i.Id == shareId)
+                    .Single();
+            }
+            catch (Exception InvalidOperation)
+            {
+                // If shares is null return to shares details page
+                return RedirectToAction("Details", "Shares", new { id = shareId });
+            }
+
+            ViewData["fromShare"] = share;
+
+            return View();
+        }
+
+        // POST: Transactions/Deposit
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExternalTransfer(int shareId, [Bind("Amount")] Transaction transaction)
+        {
+            ViewData["fromShareId"] = shareId;
+
+            VerifyAmountNonNegative(transaction);
+
+            // Loads share from database and performs deposit
+            Share share = _context.Shares.Include(s => s.Account).Where(w => w.Id == shareId).Single();
+
+            if (share.CurrentBalance - share.MinimumBalance >= transaction.Amount)
+            {
+                share.CurrentBalance -= transaction.Amount;
+            }
+            else
+            {
+                ModelState.AddModelError("Amount", "Insufficient Balance");
+                return View();
+            }
+
+            // Sets transaction values
+            transaction.DateTime = DateTime.Now;
+            transaction.Share = share;
+            transaction.NewBalance = share.CurrentBalance;
+            transaction.Amount = -1 * transaction.Amount;
+
+            ModelState.ClearValidationState(nameof(Share));
+
+            // Verify's share model is valid and saves changes to database if so,
+            // if not, reload page
+            if (TryValidateModel(transaction, nameof(Share)))
+            {
+                _context.Add(transaction);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Shares", new { id = shareId });
+            }
+
             return View();
         }
     }

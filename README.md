@@ -14,9 +14,10 @@ What can you do:
   - View the members on the account
   - Deposit money into shares
   - Transfer money between shares on the same account
+  - "Transfer" money to external "institutions"
   - View transactions performed on shares
 
 Upcoming Features
   - Member to member transfers
-  - External transfers
+
 

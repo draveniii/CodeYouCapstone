@@ -53,7 +53,8 @@
                     <td>
                         <a asp-controller="Shares" asp-action="Details" asp-route-id="@share.Id">Details</a> |
                         <a asp-controller="Transactions" asp-action="Deposit" asp-route-shareId="@share.Id">Deposit</a> |
-                        <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@share.Id">Transfer From</a>
+                        <a asp-controller="Transactions" asp-action="Transfer" asp-route-shareId="@share.Id">Transfer From</a> |
+                        <a asp-controller="Transactions" asp-action="ExternalTransfer" asp-route-shareId="@share.Id">External Transfer</a>
                     </td>
                 </tr>
             }
