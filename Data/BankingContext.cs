@@ -52,10 +52,10 @@ namespace WebBankingApp.Data
             Share account4Share3 = new Share(9, "Money Market", 1000, .1M, account4, 10000);
 
             // Creates and adds shares to account 5
-            Share account5Share1 = new Share(10, "Savings", 25, .005M, account5, 2500);
-            Share account5Share2 = new Share(11, "Money Market", 1000, .1M, account5, 400);
+            Share account5Share1 = new Share(10, "Savings", 25, .005M, account5, 100);
+            Share account5Share2 = new Share(11, "Money Market", 1000, .1M, account5, 4000);
 
-            //// Creates Members
+            // Creates Members
             Member member1 = new Member(1, "Draven McConathy", new(2001, 5, 18), 123456789);
             Member member2 = new Member(2, "Mercedes Helliangao", new(2002, 3, 12), 987654321);
             Member member3 = new Member(3, "Terry Pratchet", new(1987, 5, 1), 278465792);
@@ -63,7 +63,7 @@ namespace WebBankingApp.Data
             Member member5 = new Member(5, "Adam Littlefinger", new(2004, 1, 27), 098536678);
             Member member6 = new Member(6, "Mary Littlefinger", new(1979, 8, 19), 444886578);
 
-            //// AccountMember association
+            // AccountMember association
             AccountMember accountMember1 = new AccountMember(1, 1, account1, 1, member1);
             AccountMember accountMember2 = new AccountMember(2, 1, account1, 2, member2);
             AccountMember accountMember3 = new AccountMember(3, 2, account2, 2, member2);

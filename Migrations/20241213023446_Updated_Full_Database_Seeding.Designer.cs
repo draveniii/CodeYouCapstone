@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebBankingApp.Data;
 
@@ -10,9 +11,11 @@ using WebBankingApp.Data;
 namespace MVCWebBanking.Migrations
 {
     [DbContext(typeof(BankingContext))]
-    partial class BankingContextModelSnapshot : ModelSnapshot
+    [Migration("20241213023446_Updated_Full_Database_Seeding")]
+    partial class Updated_Full_Database_Seeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
