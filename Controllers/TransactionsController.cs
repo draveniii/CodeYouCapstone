@@ -107,6 +107,7 @@ namespace MVCWebBanking.Controllers
             }
                         
             ViewData["shares"] = shares;
+            ViewData["fromShare"] = share;
 
             return View(new Transaction());
         }

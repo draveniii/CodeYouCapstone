@@ -163,7 +163,7 @@ namespace MVCWebBanking.Tests.Controllers
         [Fact]
         public async Task DetailsGetFound()
         {
-            // ArrangeS
+            // Arrange
             AccountsController controller = DataSetup(true);
             MockHttpContext(controller, "accountId", "1");
 
@@ -200,6 +200,7 @@ namespace MVCWebBanking.Tests.Controllers
             Assert.IsType<NotFoundResult>(result);
         }
 
+        // Sets up HttpContext for tests that need access to mock cookies
         private void MockHttpContext(AccountsController controller, string cookieKey, string cookieValue)
         {
             string CookieKey = cookieKey;
